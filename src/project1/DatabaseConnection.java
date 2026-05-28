@@ -12,8 +12,8 @@ public class DatabaseConnection {
     
     // Database configuration
     private static final String DATABASE_URL = "jdbc:mysql://localhost:3306/project1";
-    private static final String USERNAME = "root";
-    private static final String PASSWORD = ""; //the password from mysql 
+    private static final String USERNAME = ""; //your password from mysql 
+    private static final String PASSWORD = ""; //your password from mysql 
     
     /**
      * Gets a connection to the database
