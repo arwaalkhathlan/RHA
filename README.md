@@ -13,6 +13,7 @@
 ## Table of Contents
 
 - [About the Project](#about-the-project)
+- [System Demonstration](#system-demonstration)
 - [Features](#features)
 - [Database Schema](#database-schema)
 - [Getting Started](#getting-started)
@@ -37,6 +38,14 @@ Location: King Fahd Road, Riyadh 12271, Saudi Arabia
 Cuisine: Japanese (Sushi, Sashimi, Teppanyaki)
 Contact: +966-11-456-7890
 
+
+---
+
+## System Demonstration
+
+<div align="center">
+  <video src="https://github.com/arwaalkhathlan/RMS/raw/refs/heads/main/RMS Demo.mp4" width="100%" controls="controls"></video>
+</div>
 
 ---
 
