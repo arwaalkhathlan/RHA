@@ -151,7 +151,7 @@ Audit trail for price changes
 ### Entity Relationship Diagram
 
 <div align="center">
-  <img src="Entity Relationship Diagram.png" alt="ERD" width="500"/>
+  <img src="Entity Relationship Diagram2.png" alt="ERD" width="500"/>
 </div>
 
 
