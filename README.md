@@ -1,9 +1,9 @@
-# RMS Restaurant Management System
+# RHA Restaurant Management System
 
 <div align="center">
   <img src="RHALogo.png" alt="RHA Logo" width="200"/>
   
-  **RMS Smart Restaurant Management System**
+  **RHA Smart Restaurant Management System**
   
   A comprehensive database-driven solution for managing restaurant operations including reservations, orders, menu items, employees, and payments.
 </div>
@@ -14,6 +14,7 @@
 
 - [About the Project](#about-the-project)
 - [Features](#features)
+- [System Demonstration](#system-demonstration)
 - [Database Schema](#database-schema)
 - [Getting Started](#getting-started)
 - [Database Setup](#database-setup)
@@ -37,6 +38,13 @@ Location: King Fahd Road, Riyadh 12271, Saudi Arabia
 Cuisine: Japanese (Sushi, Sashimi, Teppanyaki)
 Contact: +966-11-456-7890
 
+---
+
+## System Demonstration
+
+<div align="center">
+  <video src="RMS Demo1.mp4" width="100%" controls="controls"></video>
+</div>
 
 ---
 
@@ -520,5 +528,5 @@ This project is created for educational purposes.
 <div align="center">
  
   
-  **RMS - Smart Restaurant Management System**
+  **RHA - Smart Restaurant Management System**
 </div>
