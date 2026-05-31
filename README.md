@@ -42,12 +42,11 @@ Contact: +966-11-456-7890
 
 ## System Demonstration
 
-<div align="center">
-  <video src="RMS Demo1.mp4" width="100%" controls="controls"></video>
-</div>
 
 <div align="center">
-  <video src="https://github.com/arwaalkhathlan/RMS/raw/refs/heads/main/RMS%20Demo1.mp4" width="100%" controls="controls"></video>
+  <a href="https://youtu.be/PJOC-DjIrJE">
+    <img src="https://img.youtube.com/vi/PJOC-DjIrJE/maxresdefault.jpg" alt="RMS System Demonstration" width="100%">
+  </a>
 </div>
 ---
 
