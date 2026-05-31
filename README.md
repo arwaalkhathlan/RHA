@@ -46,6 +46,9 @@ Contact: +966-11-456-7890
   <video src="RMS Demo1.mp4" width="100%" controls="controls"></video>
 </div>
 
+<div align="center">
+  <video src="https://github.com/arwaalkhathlan/RMS/raw/refs/heads/main/RMS%20Demo1.mp4" width="100%" controls="controls"></video>
+</div>
 ---
 
 ## Features
