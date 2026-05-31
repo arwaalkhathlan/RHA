@@ -29,7 +29,7 @@
 
 ## About the Project
 
-RMS (Restaurant Management System) is a complete database solution designed for a restaurants. The system manages all aspects of restaurant operations from table reservations to order processing, employee management, and payment tracking.
+RHA (Restaurant Management System) is a complete database solution designed for a restaurants. The system manages all aspects of restaurant operations from table reservations to order processing, employee management, and payment tracking.
 
 Used Sample has these Restaurant Details:
 
@@ -45,7 +45,7 @@ Contact: +966-11-456-7890
 
 <div align="center">
   <a href="https://youtu.be/PJOC-DjIrJE">
-    <img src="https://img.youtube.com/vi/PJOC-DjIrJE/maxresdefault.jpg" alt="RMS System Demonstration" width="100%">
+    <img src="https://img.youtube.com/vi/PJOC-DjIrJE/maxresdefault.jpg" alt="RHA System Demonstration" width="100%">
   </a>
 </div>
 
@@ -172,7 +172,7 @@ Audit trail for price changes
 1. **Clone or Download the Repository**
    ```bash
    git clone <repository-url>
-   cd RMS
+   cd RHA
    ```
 
 2. **Verify MySQL Installation**
