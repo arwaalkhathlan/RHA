@@ -33,10 +33,12 @@ RHA (Restaurant Management System) is a complete database solution designed for 
 
 Used Sample has these Restaurant Details:
 
-Name: RHA\n
-Location: King Fahd Road, Riyadh 12271, Saudi Arabia\n
-Cuisine: Japanese (Sushi, Sashimi, Teppanyaki)\n
-Contact: +966-11-456-7890\n
+```text
+Name: RHA
+Location: King Fahd Road, Riyadh 12271, Saudi Arabia
+Cuisine: Japanese (Sushi, Sashimi, Teppanyaki)
+Contact: +966-11-456-7890
+```
 
 ---
 
