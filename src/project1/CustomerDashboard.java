@@ -29,6 +29,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JTable;
@@ -37,19 +38,15 @@ import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.table.DefaultTableModel;
 
-/**
- * Customer Dashboard - Main interface for customers with RHA branding
- * Privileges: Browse menu, Reserve tables, View reservations, Make payments
- */
 public class CustomerDashboard extends JFrame implements ActionListener {
     
     // RHA Brand Colors
-    private static final Color RHA_DARK = new Color(0x232326);      // #232326 - Dark background
-    private static final Color RHA_LIGHT = new Color(0xEDEDED);     // #EDEDED - Light background
-    private static final Color RHA_YELLOW = new Color(0xFCC660);    // #FCC660 - Primary accent
-    private static final Color RHA_ORANGE = new Color(0xEB2F00);    // #EB2F00 - Secondary accent
-    private static final Color TEXT_DARK = new Color(0x232326);     // Dark text
-    private static final Color TEXT_LIGHT = new Color(0xEDEDED);    // Light text
+    private static final Color RHA_DARK = new Color(0x232326);
+    private static final Color RHA_LIGHT = new Color(0xEDEDED);
+    private static final Color RHA_YELLOW = new Color(0xFCC660);
+    private static final Color RHA_ORANGE = new Color(0xEB2F00);
+    private static final Color TEXT_DARK = new Color(0x232326);
+    private static final Color TEXT_LIGHT = new Color(0xEDEDED);
     
     private User currentUser;
     private CardLayout cardLayout;
@@ -82,6 +79,11 @@ public class CustomerDashboard extends JFrame implements ActionListener {
     private JTable ordersTable;
     private DefaultTableModel ordersTableModel;
     
+    // Profile Labels for auto-updating
+    private JLabel profileNameVal;
+    private JLabel profileEmailVal;
+    private JLabel profilePhoneVal;
+    
     public CustomerDashboard(User user) {
         this.currentUser = user;
         initComponents();
@@ -92,24 +94,19 @@ public class CustomerDashboard extends JFrame implements ActionListener {
     }
     
     private void initComponents() {
-        // Main Layout
         setLayout(new BorderLayout());
         
-        // Header Panel
         JPanel headerPanel = createHeaderPanel();
         add(headerPanel, BorderLayout.NORTH);
         
-        // Navigation Panel
         JPanel navPanel = createNavigationPanel();
         add(navPanel, BorderLayout.WEST);
         
-        // Content Panel with CardLayout
         cardLayout = new CardLayout();
         contentPanel = new JPanel(cardLayout);
         contentPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         contentPanel.setBackground(RHA_LIGHT);
         
-        // Add panels to CardLayout
         contentPanel.add(createMenuPanel(), "MENU");
         contentPanel.add(createReservationPanel(), "RESERVATION");
         contentPanel.add(createMyReservationsPanel(), "MY_RESERVATIONS");
@@ -124,14 +121,11 @@ public class CustomerDashboard extends JFrame implements ActionListener {
         panel.setBackground(RHA_DARK);
         panel.setBorder(BorderFactory.createEmptyBorder(15, 25, 15, 25));
         
-        // Left panel with logo and title
         JPanel leftPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 15, 0));
         leftPanel.setBackground(RHA_DARK);
         
-        // RHA Logo Image
         JLabel logoLabel = new JLabel();
         try {
-            // Try PNG first, then JPG
             ImageIcon logoIcon = null;
             if (new java.io.File("RHALogo.png").exists()) {
                 logoIcon = new ImageIcon("RHALogo.png");
@@ -140,19 +134,16 @@ public class CustomerDashboard extends JFrame implements ActionListener {
             }
             
             if (logoIcon != null && logoIcon.getIconWidth() > 0) {
-                
                 Image img = logoIcon.getImage();
                 Image scaledImg = img.getScaledInstance(50, 50, Image.SCALE_AREA_AVERAGING);
                 logoIcon = new ImageIcon(scaledImg);
                 logoLabel.setIcon(logoIcon);
             } else {
-                // Fallback to text logo
                 logoLabel.setText("RHA");
                 logoLabel.setFont(new Font("Arial", Font.BOLD, 24));
                 logoLabel.setForeground(RHA_YELLOW);
             }
         } catch (Exception e) {
-            // Fallback to text logo if image not found
             logoLabel.setText("RHA");
             logoLabel.setFont(new Font("Arial", Font.BOLD, 24));
             logoLabel.setForeground(RHA_YELLOW);
@@ -190,7 +181,6 @@ public class CustomerDashboard extends JFrame implements ActionListener {
         logoutButton.setBackground(RHA_ORANGE);
         logoutButton.setForeground(RHA_LIGHT); 
 
-        
         panel.add(menuButton);
         panel.add(reservationButton);
         panel.add(myReservationsButton);
@@ -212,7 +202,6 @@ public class CustomerDashboard extends JFrame implements ActionListener {
         button.setBorder(BorderFactory.createEmptyBorder(12, 15, 12, 15));
         button.addActionListener(this);
         
-        // Hover effect
         button.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
@@ -243,12 +232,10 @@ public class CustomerDashboard extends JFrame implements ActionListener {
             BorderFactory.createEmptyBorder(15, 15, 15, 15)
         ));
         
-        // Title
         JLabel titleLabel = new JLabel("Browse Menu");
         titleLabel.setFont(new Font("Arial", Font.BOLD, 20));
         titleLabel.setForeground(RHA_DARK);
         
-        // Filter Panel
         JPanel filterPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
         filterPanel.setBackground(RHA_LIGHT);
         
@@ -277,7 +264,6 @@ public class CustomerDashboard extends JFrame implements ActionListener {
         
         panel.add(topPanel, BorderLayout.NORTH);
         
-        // Menu Table
         String[] columns = {"Item ID", "Name", "Price (SAR)", "Category", "Available"};
         menuTableModel = new DefaultTableModel(columns, 0) {
             @Override
@@ -313,14 +299,12 @@ public class CustomerDashboard extends JFrame implements ActionListener {
         titleLabel.setForeground(RHA_DARK);
         panel.add(titleLabel, BorderLayout.NORTH);
         
-        // Form Panel
         JPanel formPanel = new JPanel(new GridBagLayout());
         formPanel.setBackground(RHA_LIGHT);
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 10, 10, 10);
         gbc.fill = GridBagConstraints.HORIZONTAL;
         
-        // Table Selection
         gbc.gridx = 0; gbc.gridy = 0;
         JLabel tableLabel = new JLabel("Select Table:");
         tableLabel.setForeground(RHA_DARK);
@@ -332,7 +316,6 @@ public class CustomerDashboard extends JFrame implements ActionListener {
         tableComboBox.setPreferredSize(new Dimension(200, 35));
         formPanel.add(tableComboBox, gbc);
         
-        // Number of Guests
         gbc.gridx = 0; gbc.gridy = 1;
         JLabel guestsLabel = new JLabel("Number of Guests:");
         guestsLabel.setForeground(RHA_DARK);
@@ -343,7 +326,6 @@ public class CustomerDashboard extends JFrame implements ActionListener {
         guestsSpinner.setPreferredSize(new Dimension(200, 35));
         formPanel.add(guestsSpinner, gbc);
         
-        // Date and Time
         gbc.gridx = 0; gbc.gridy = 2;
         JLabel dateTimeLabel = new JLabel("Date & Time (YYYY-MM-DD HH:MM):");
         dateTimeLabel.setForeground(RHA_DARK);
@@ -358,7 +340,6 @@ public class CustomerDashboard extends JFrame implements ActionListener {
         ));
         formPanel.add(dateTimeField, gbc);
         
-        // Notes
         gbc.gridx = 0; gbc.gridy = 3;
         JLabel notesLabel = new JLabel("Special Requests:");
         notesLabel.setForeground(RHA_DARK);
@@ -375,7 +356,6 @@ public class CustomerDashboard extends JFrame implements ActionListener {
         
         panel.add(formPanel, BorderLayout.CENTER);
         
-        // Button Panel
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 10));
         buttonPanel.setBackground(RHA_LIGHT);
         
@@ -415,7 +395,6 @@ public class CustomerDashboard extends JFrame implements ActionListener {
         titleLabel.setForeground(RHA_DARK);
         panel.add(titleLabel, BorderLayout.NORTH);
         
-        // Reservations Table
         String[] columns = {"Reservation ID", "Table", "Guests", "Date & Time", "Status"};
         reservationsTableModel = new DefaultTableModel(columns, 0) {
             @Override
@@ -435,7 +414,6 @@ public class CustomerDashboard extends JFrame implements ActionListener {
         scrollPane.setBorder(BorderFactory.createLineBorder(RHA_DARK, 1));
         panel.add(scrollPane, BorderLayout.CENTER);
         
-        // Button Panel
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 10));
         buttonPanel.setBackground(RHA_LIGHT);
         
@@ -475,7 +453,6 @@ public class CustomerDashboard extends JFrame implements ActionListener {
         titleLabel.setForeground(RHA_DARK);
         panel.add(titleLabel, BorderLayout.NORTH);
         
-        // Orders Table
         String[] columns = {"Order ID", "Date", "Total (SAR)", "Status", "Payment"};
         ordersTableModel = new DefaultTableModel(columns, 0) {
             @Override
@@ -495,7 +472,6 @@ public class CustomerDashboard extends JFrame implements ActionListener {
         scrollPane.setBorder(BorderFactory.createLineBorder(RHA_DARK, 1));
         panel.add(scrollPane, BorderLayout.CENTER);
         
-        // Button Panel
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 10));
         buttonPanel.setBackground(RHA_LIGHT);
         
@@ -532,28 +508,25 @@ public class CustomerDashboard extends JFrame implements ActionListener {
         
         JLabel titleLabel = new JLabel("My Profile");
         titleLabel.setFont(new Font("Arial", Font.BOLD, 20));
-        titleLabel.setForeground(RHA_LIGHT);
+        titleLabel.setForeground(RHA_DARK);
         panel.add(titleLabel, BorderLayout.NORTH);
         
-        // Profile Information Panel
         JPanel infoPanel = new JPanel(new GridBagLayout());
         infoPanel.setBackground(RHA_LIGHT);
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 10, 10, 10);
         gbc.anchor = GridBagConstraints.WEST;
         
-        // Display user information
         int row = 0;
-        addProfileField(infoPanel, "Name:", currentUser.getFullName(), gbc, row++);
+        profileNameVal = addProfileField(infoPanel, "Name:", currentUser.getFullName(), gbc, row++);
         addProfileField(infoPanel, "Username:", currentUser.getUsername(), gbc, row++);
-        addProfileField(infoPanel, "Email:", currentUser.getEmail(), gbc, row++);
-        addProfileField(infoPanel, "Phone:", currentUser.getPhoneNumber(), gbc, row++);
+        profileEmailVal = addProfileField(infoPanel, "Email:", currentUser.getEmail(), gbc, row++);
+        profilePhoneVal = addProfileField(infoPanel, "Phone:", currentUser.getPhoneNumber(), gbc, row++);
         addProfileField(infoPanel, "User Type:", currentUser.getUserType(), gbc, row++);
         
         panel.add(infoPanel, BorderLayout.CENTER);
         
-        // Update Button
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 10));
         buttonPanel.setBackground(RHA_LIGHT);
         
         JButton updateBtn = new JButton("Update Profile");
@@ -562,15 +535,26 @@ public class CustomerDashboard extends JFrame implements ActionListener {
         updateBtn.setFont(new Font("Arial", Font.BOLD, 14));
         updateBtn.setPreferredSize(new Dimension(160, 45));
         updateBtn.setFocusPainted(false);
-        updateBtn.addActionListener(e -> JOptionPane.showMessageDialog(this, "Profile update feature coming soon!"));
+        // HOOKED UP TO UserDAO
+        updateBtn.addActionListener(e -> updateProfileAction());
+        
+        JButton changePassBtn = new JButton("Change Password");
+        changePassBtn.setBackground(RHA_DARK);
+        changePassBtn.setForeground(TEXT_LIGHT);
+        changePassBtn.setFont(new Font("Arial", Font.BOLD, 14));
+        changePassBtn.setPreferredSize(new Dimension(160, 45));
+        changePassBtn.setFocusPainted(false);
+        // HOOKED UP TO UserDAO
+        changePassBtn.addActionListener(e -> changePasswordAction());
         
         buttonPanel.add(updateBtn);
+        buttonPanel.add(changePassBtn);
         panel.add(buttonPanel, BorderLayout.SOUTH);
         
         return panel;
     }
     
-    private void addProfileField(JPanel panel, String label, String value, GridBagConstraints gbc, int row) {
+    private JLabel addProfileField(JPanel panel, String label, String value, GridBagConstraints gbc, int row) {
         gbc.gridx = 0;
         gbc.gridy = row;
         JLabel lbl = new JLabel(label);
@@ -579,11 +563,104 @@ public class CustomerDashboard extends JFrame implements ActionListener {
         panel.add(lbl, gbc);
         
         gbc.gridx = 1;
-        JLabel val = new JLabel(value != null ? value : "N/A");
+        JLabel val = new JLabel(value != null && !value.isEmpty() ? value : "N/A");
         val.setFont(new Font("Arial", Font.PLAIN, 14));
         val.setForeground(RHA_DARK);
         panel.add(val, gbc);
+        return val; // return it so we can store it in instance variables for live-updating
     }
+
+    // --- NEW DAO INTEGRATION METHODS ---
+    private void updateProfileAction() {
+        JTextField fNameField = new JTextField(currentUser.getFirstName());
+        JTextField mNameField = new JTextField(currentUser.getMiddleName() != null ? currentUser.getMiddleName() : "");
+        JTextField lNameField = new JTextField(currentUser.getLastName());
+        JTextField emailField = new JTextField(currentUser.getEmail() != null ? currentUser.getEmail() : "");
+        JTextField phoneField = new JTextField(currentUser.getPhoneNumber() != null ? currentUser.getPhoneNumber() : "");
+
+        Object[] message = {
+            "First Name:", fNameField,
+            "Middle Name:", mNameField,
+            "Last Name:", lNameField,
+            "Email:", emailField,
+            "Phone Number:", phoneField
+        };
+
+        int option = JOptionPane.showConfirmDialog(this, message, "Update Profile", JOptionPane.OK_CANCEL_OPTION);
+        if (option == JOptionPane.OK_OPTION) {
+            String newEmail = emailField.getText().trim();
+            
+            // USE DAO to check if new email is taken by someone else
+            if (!newEmail.isEmpty() && !newEmail.equalsIgnoreCase(currentUser.getEmail()) && UserDAO.emailExists(newEmail)) {
+                JOptionPane.showMessageDialog(this, "Email is already in use by another account.");
+                return;
+            }
+
+            // Create a temporary user to pass to DAO
+            User tempUser = new User();
+            tempUser.setUserID(currentUser.getUserID());
+            tempUser.setFirstName(fNameField.getText().trim());
+            tempUser.setMiddleName(mNameField.getText().trim());
+            tempUser.setLastName(lNameField.getText().trim());
+            tempUser.setEmail(newEmail);
+            tempUser.setPhoneNumber(phoneField.getText().trim());
+            
+            // USE DAO to update user
+            if (UserDAO.updateUser(tempUser)) {
+                // Update our current object
+                currentUser.setFirstName(tempUser.getFirstName());
+                currentUser.setMiddleName(tempUser.getMiddleName());
+                currentUser.setLastName(tempUser.getLastName());
+                currentUser.setEmail(tempUser.getEmail());
+                currentUser.setPhoneNumber(tempUser.getPhoneNumber());
+                
+                // Live update the UI Labels
+                profileNameVal.setText(currentUser.getFullName());
+                profileEmailVal.setText(currentUser.getEmail().isEmpty() ? "N/A" : currentUser.getEmail());
+                profilePhoneVal.setText(currentUser.getPhoneNumber().isEmpty() ? "N/A" : currentUser.getPhoneNumber());
+                
+                JOptionPane.showMessageDialog(this, "Profile updated successfully!");
+            } else {
+                JOptionPane.showMessageDialog(this, "Failed to update profile.", "Database Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+
+    private void changePasswordAction() {
+        JPasswordField oldPassField = new JPasswordField();
+        JPasswordField newPassField = new JPasswordField();
+        JPasswordField confirmPassField = new JPasswordField();
+
+        Object[] message = {
+            "Old Password:", oldPassField,
+            "New Password:", newPassField,
+            "Confirm New Password:", confirmPassField
+        };
+
+        int option = JOptionPane.showConfirmDialog(this, message, "Change Password", JOptionPane.OK_CANCEL_OPTION);
+        if (option == JOptionPane.OK_OPTION) {
+            String oldPass = new String(oldPassField.getPassword());
+            String newPass = new String(newPassField.getPassword());
+            String confirmPass = new String(confirmPassField.getPassword());
+
+            if (newPass.length() < 6) {
+                JOptionPane.showMessageDialog(this, "Password must be at least 6 characters long.");
+                return;
+            }
+            if (!newPass.equals(confirmPass)) {
+                JOptionPane.showMessageDialog(this, "New passwords do not match.");
+                return;
+            }
+
+            // USE DAO to change password
+            if (UserDAO.changePassword(currentUser.getUserID(), oldPass, newPass)) {
+                JOptionPane.showMessageDialog(this, "Password changed successfully!");
+            } else {
+                JOptionPane.showMessageDialog(this, "Incorrect old password or system error.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+    // -----------------------------------
     
     private void loadMenuData() {
         menuTableModel.setRowCount(0);
@@ -752,7 +829,6 @@ public class CustomerDashboard extends JFrame implements ActionListener {
                      "VALUES (?, ?, ?, ?, 'Pending', ?)";
         
         try (Connection conn = DatabaseConnection.getConnection()) {
-            // Get next reservation ID
             int nextID = 1;
             try (Statement stmt = conn.createStatement();
                  ResultSet rs = stmt.executeQuery("SELECT MAX(ReservationID) FROM Reservation")) {
@@ -820,8 +896,6 @@ public class CustomerDashboard extends JFrame implements ActionListener {
         }
         
         int orderID = (Integer) ordersTableModel.getValueAt(selectedRow, 0);
-        
-        // Create a dialog to show order details
         StringBuilder details = new StringBuilder();
         details.append("Order #").append(orderID).append(" Details:\n\n");
         
