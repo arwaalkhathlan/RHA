@@ -1363,156 +1363,126 @@ public class StaffDashboard extends JFrame implements ActionListener {
     }
     
     private void addEmployee(DefaultTableModel model) {
-        JPanel panel = new JPanel(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(5, 5, 5, 5);
-        gbc.anchor = GridBagConstraints.WEST;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
+    JPanel panel = new JPanel(new GridBagLayout());
+    GridBagConstraints gbc = new GridBagConstraints();
+    gbc.insets = new Insets(5, 5, 5, 5);
+    gbc.anchor = GridBagConstraints.WEST;
+    gbc.fill = GridBagConstraints.HORIZONTAL;
+    
+    JTextField fnameField = new JTextField(15);
+    JTextField mnameField = new JTextField(15);
+    JTextField lnameField = new JTextField(15);
+    JTextField usernameField = new JTextField(15);
+    JTextField emailField = new JTextField(15);
+    JTextField phoneField = new JTextField(15);
+    JPasswordField passwordField = new JPasswordField(15);
+    JTextField salaryField = new JTextField(15);
+    
+    String[] roles = {"Waiter", "Cashier", "Hostess", "Sushi Chef", "Line Cook", 
+                     "Kitchen Assistant", "Floor Manager", "Head Chef", "General Manager"};
+    JComboBox<String> roleCombo = new JComboBox<>(roles);
+    
+    JComboBox<Integer> supervisorCombo = new JComboBox<>();
+    supervisorCombo.addItem(null);
+    loadSupervisors(supervisorCombo);
+    
+    gbc.gridx = 0; gbc.gridy = 0; panel.add(new JLabel("First Name:"), gbc); gbc.gridx = 1; panel.add(fnameField, gbc);
+    gbc.gridx = 0; gbc.gridy = 1; panel.add(new JLabel("Middle Name:"), gbc); gbc.gridx = 1; panel.add(mnameField, gbc);
+    gbc.gridx = 0; gbc.gridy = 2; panel.add(new JLabel("Last Name:"), gbc); gbc.gridx = 1; panel.add(lnameField, gbc);
+    gbc.gridx = 0; gbc.gridy = 3; panel.add(new JLabel("Username:"), gbc); gbc.gridx = 1; panel.add(usernameField, gbc);
+    gbc.gridx = 0; gbc.gridy = 4; panel.add(new JLabel("Email:"), gbc); gbc.gridx = 1; panel.add(emailField, gbc);
+    gbc.gridx = 0; gbc.gridy = 5; panel.add(new JLabel("Phone Number:"), gbc); gbc.gridx = 1; panel.add(phoneField, gbc);
+    gbc.gridx = 0; gbc.gridy = 6; panel.add(new JLabel("Password:"), gbc); gbc.gridx = 1; panel.add(passwordField, gbc);
+    gbc.gridx = 0; gbc.gridy = 7; panel.add(new JLabel("Salary (SAR):"), gbc); gbc.gridx = 1; panel.add(salaryField, gbc);
+    gbc.gridx = 0; gbc.gridy = 8; panel.add(new JLabel("Role:"), gbc); gbc.gridx = 1; panel.add(roleCombo, gbc);
+    gbc.gridx = 0; gbc.gridy = 9; panel.add(new JLabel("Supervisor:"), gbc); gbc.gridx = 1; panel.add(supervisorCombo, gbc);
+    
+    int result = JOptionPane.showConfirmDialog(this, panel, "Add New Employee", 
+                                               JOptionPane.OK_CANCEL_OPTION, 
+                                               JOptionPane.PLAIN_MESSAGE);
+    
+    if (result == JOptionPane.OK_OPTION) {
+        String fname = fnameField.getText().trim();
+        String mname = mnameField.getText().trim();
+        String lname = lnameField.getText().trim();
+        String username = usernameField.getText().trim();
+        String email = emailField.getText().trim();
+        String phone = phoneField.getText().trim();
+        String password = new String(passwordField.getPassword());
+        String salaryText = salaryField.getText().trim();
+        String role = (String) roleCombo.getSelectedItem();
+        Integer supervisorId = (Integer) supervisorCombo.getSelectedItem();
         
-        JTextField fnameField = new JTextField(15);
-        JTextField mnameField = new JTextField(15);
-        JTextField lnameField = new JTextField(15);
-        JTextField usernameField = new JTextField(15);
-        JTextField emailField = new JTextField(15);
-        JTextField phoneField = new JTextField(15);
-        JPasswordField passwordField = new JPasswordField(15);
-        JTextField salaryField = new JTextField(15);
+        if (fname.isEmpty() || lname.isEmpty() || username.isEmpty() || password.isEmpty() || salaryText.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please fill in all required fields.");
+            return;
+        }
+
+        // --- USE DAO FOR DATA VALIDATION ---
+        if (UserDAO.usernameExists(username)) {
+            JOptionPane.showMessageDialog(this, "Username already exists. Please choose another.");
+            return;
+        }
+        if (!email.isEmpty() && UserDAO.emailExists(email)) {
+            JOptionPane.showMessageDialog(this, "Email already registered. Please use another.");
+            return;
+        }
+        // -----------------------------------
         
-        String[] roles = {"Waiter", "Cashier", "Hostess", "Sushi Chef", "Line Cook", 
-                         "Kitchen Assistant", "Floor Manager", "Head Chef", "General Manager"};
-        JComboBox<String> roleCombo = new JComboBox<>(roles);
-        
-        JComboBox<Integer> supervisorCombo = new JComboBox<>();
-        supervisorCombo.addItem(null); // No supervisor option
-        loadSupervisors(supervisorCombo);
-        
-        gbc.gridx = 0; gbc.gridy = 0;
-        panel.add(new JLabel("First Name:"), gbc);
-        gbc.gridx = 1;
-        panel.add(fnameField, gbc);
-        
-        gbc.gridx = 0; gbc.gridy = 1;
-        panel.add(new JLabel("Middle Name:"), gbc);
-        gbc.gridx = 1;
-        panel.add(mnameField, gbc);
-        
-        gbc.gridx = 0; gbc.gridy = 2;
-        panel.add(new JLabel("Last Name:"), gbc);
-        gbc.gridx = 1;
-        panel.add(lnameField, gbc);
-        
-        gbc.gridx = 0; gbc.gridy = 3;
-        panel.add(new JLabel("Username:"), gbc);
-        gbc.gridx = 1;
-        panel.add(usernameField, gbc);
-        
-        gbc.gridx = 0; gbc.gridy = 4;
-        panel.add(new JLabel("Email:"), gbc);
-        gbc.gridx = 1;
-        panel.add(emailField, gbc);
-        
-        gbc.gridx = 0; gbc.gridy = 5;
-        panel.add(new JLabel("Phone Number:"), gbc);
-        gbc.gridx = 1;
-        panel.add(phoneField, gbc);
-        
-        gbc.gridx = 0; gbc.gridy = 6;
-        panel.add(new JLabel("Password:"), gbc);
-        gbc.gridx = 1;
-        panel.add(passwordField, gbc);
-        
-        gbc.gridx = 0; gbc.gridy = 7;
-        panel.add(new JLabel("Salary (SAR):"), gbc);
-        gbc.gridx = 1;
-        panel.add(salaryField, gbc);
-        
-        gbc.gridx = 0; gbc.gridy = 8;
-        panel.add(new JLabel("Role:"), gbc);
-        gbc.gridx = 1;
-        panel.add(roleCombo, gbc);
-        
-        gbc.gridx = 0; gbc.gridy = 9;
-        panel.add(new JLabel("Supervisor:"), gbc);
-        gbc.gridx = 1;
-        panel.add(supervisorCombo, gbc);
-        
-        int result = JOptionPane.showConfirmDialog(this, panel, "Add New Employee", 
-                                                   JOptionPane.OK_CANCEL_OPTION, 
-                                                   JOptionPane.PLAIN_MESSAGE);
-        
-        if (result == JOptionPane.OK_OPTION) {
-            String fname = fnameField.getText().trim();
-            String mname = mnameField.getText().trim();
-            String lname = lnameField.getText().trim();
-            String username = usernameField.getText().trim();
-            String email = emailField.getText().trim();
-            String phone = phoneField.getText().trim();
-            String password = new String(passwordField.getPassword());
-            String salaryText = salaryField.getText().trim();
-            String role = (String) roleCombo.getSelectedItem();
-            Integer supervisorId = (Integer) supervisorCombo.getSelectedItem();
+        try {
+            double salary = Double.parseDouble(salaryText);
             
-            if (fname.isEmpty() || lname.isEmpty() || username.isEmpty() || 
-                password.isEmpty() || salaryText.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Please fill in all required fields.");
-                return;
-            }
-            
-            try {
-                double salary = Double.parseDouble(salaryText);
+            try (Connection conn = DatabaseConnection.getConnection()) {
+                conn.setAutoCommit(false);
                 
-                try (Connection conn = DatabaseConnection.getConnection()) {
-                    conn.setAutoCommit(false);
-                    
-                    int newUserId = getNextUserId(conn);
-                    
-                    String insertUserSQL = "INSERT INTO Users (UserID, FName, MName, LName, Username, Email, PhoneNumber, Password, UserType) " +
-                                          "VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'Employee')";
-                    try (PreparedStatement pstmt = conn.prepareStatement(insertUserSQL)) {
-                        pstmt.setInt(1, newUserId);
-                        pstmt.setString(2, fname);
-                        pstmt.setString(3, mname.isEmpty() ? null : mname);
-                        pstmt.setString(4, lname);
-                        pstmt.setString(5, username);
-                        pstmt.setString(6, email.isEmpty() ? null : email);
-                        pstmt.setString(7, phone.isEmpty() ? null : phone);
-                        pstmt.setString(8, password);
-                        pstmt.executeUpdate();
-                    }
-                    
-                    String insertEmployeeSQL = "INSERT INTO Employee (EmployeeID, RestaurantID, Salary, SupervisorID) " +
-                                              "VALUES (?, 1, ?, ?)";
-                    try (PreparedStatement pstmt = conn.prepareStatement(insertEmployeeSQL)) {
-                        pstmt.setInt(1, newUserId);
-                        pstmt.setDouble(2, salary);
-                        if (supervisorId == null) {
-                            pstmt.setNull(3, java.sql.Types.INTEGER);
-                        } else {
-                            pstmt.setInt(3, supervisorId);
-                        }
-                        pstmt.executeUpdate();
-                    }
-                    
-                    String insertRoleSQL = "INSERT INTO Employee_Role (EmployeeID, Role) VALUES (?, ?)";
-                    try (PreparedStatement pstmt = conn.prepareStatement(insertRoleSQL)) {
-                        pstmt.setInt(1, newUserId);
-                        pstmt.setString(2, role);
-                        pstmt.executeUpdate();
-                    }
-                    
-                    conn.commit();
-                    JOptionPane.showMessageDialog(this, "Employee added successfully!");
-                    loadEmployees(model);
-                    
-                } catch (SQLException e) {
-                    JOptionPane.showMessageDialog(this, "Database error: " + e.getMessage());
+                int newUserId = getNextUserId(conn);
+                
+                String insertUserSQL = "INSERT INTO Users (UserID, FName, MName, LName, Username, Email, PhoneNumber, Password, UserType) " +
+                                      "VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'Employee')";
+                try (PreparedStatement pstmt = conn.prepareStatement(insertUserSQL)) {
+                    pstmt.setInt(1, newUserId);
+                    pstmt.setString(2, fname);
+                    pstmt.setString(3, mname.isEmpty() ? null : mname);
+                    pstmt.setString(4, lname);
+                    pstmt.setString(5, username);
+                    pstmt.setString(6, email.isEmpty() ? null : email);
+                    pstmt.setString(7, phone.isEmpty() ? null : phone);
+                    pstmt.setString(8, password);
+                    pstmt.executeUpdate();
                 }
-            } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(this, "Invalid salary amount.");
+                
+                String insertEmployeeSQL = "INSERT INTO Employee (EmployeeID, RestaurantID, Salary, SupervisorID) " +
+                                          "VALUES (?, 1, ?, ?)";
+                try (PreparedStatement pstmt = conn.prepareStatement(insertEmployeeSQL)) {
+                    pstmt.setInt(1, newUserId);
+                    pstmt.setDouble(2, salary);
+                    if (supervisorId == null) {
+                        pstmt.setNull(3, java.sql.Types.INTEGER);
+                    } else {
+                        pstmt.setInt(3, supervisorId);
+                    }
+                    pstmt.executeUpdate();
+                }
+                
+                String insertRoleSQL = "INSERT INTO Employee_Role (EmployeeID, Role) VALUES (?, ?)";
+                try (PreparedStatement pstmt = conn.prepareStatement(insertRoleSQL)) {
+                    pstmt.setInt(1, newUserId);
+                    pstmt.setString(2, role);
+                    pstmt.executeUpdate();
+                }
+                
+                conn.commit();
+                JOptionPane.showMessageDialog(this, "Employee added successfully!");
+                loadEmployees(model);
+                
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(this, "Database error: " + e.getMessage());
             }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Invalid salary amount.");
         }
     }
-    
+}
     private int getNextUserId(Connection conn) throws SQLException {
         String sql = "SELECT MAX(UserID) FROM Users";
         try (Statement stmt = conn.createStatement();
@@ -1661,7 +1631,7 @@ public class StaffDashboard extends JFrame implements ActionListener {
                         int result = JOptionPane.showConfirmDialog(this, panel, "Edit Employee", 
                                                                    JOptionPane.OK_CANCEL_OPTION, 
                                                                    JOptionPane.PLAIN_MESSAGE);
-                        
+ 
                         if (result == JOptionPane.OK_OPTION) {
                             String fname = fnameField.getText().trim();
                             String mname = mnameField.getText().trim();
@@ -1671,56 +1641,67 @@ public class StaffDashboard extends JFrame implements ActionListener {
                             String salaryText = salaryField.getText().trim();
                             String role = (String) roleCombo.getSelectedItem();
                             Integer supervisorId = (Integer) supervisorCombo.getSelectedItem();
-                            
+
                             if (fname.isEmpty() || lname.isEmpty() || salaryText.isEmpty()) {
                                 JOptionPane.showMessageDialog(this, "First name, last name, and salary are required.");
                                 return;
                             }
-                            
+
+                            // --- USE DAO VALIDATION ---
+                            String currentEmail = rs.getString("Email");
+                            if (!email.isEmpty() && !email.equalsIgnoreCase(currentEmail) && UserDAO.emailExists(email)) {
+                                JOptionPane.showMessageDialog(this, "Email already in use by another account.");
+                                return;
+                            }
+
                             try {
                                 double salary = Double.parseDouble(salaryText);
-                                conn.setAutoCommit(false);
-                                
-                                String updateUserSQL = "UPDATE Users SET FName = ?, MName = ?, LName = ?, Email = ?, PhoneNumber = ? WHERE UserID = ?";
-                                try (PreparedStatement updateUser = conn.prepareStatement(updateUserSQL)) {
-                                    updateUser.setString(1, fname);
-                                    updateUser.setString(2, mname.isEmpty() ? null : mname);
-                                    updateUser.setString(3, lname);
-                                    updateUser.setString(4, email.isEmpty() ? null : email);
-                                    updateUser.setString(5, phone.isEmpty() ? null : phone);
-                                    updateUser.setInt(6, employeeId);
-                                    updateUser.executeUpdate();
-                                }
-                                
-                                String updateEmployeeSQL = "UPDATE Employee SET Salary = ?, SupervisorID = ? WHERE EmployeeID = ?";
-                                try (PreparedStatement updateEmp = conn.prepareStatement(updateEmployeeSQL)) {
-                                    updateEmp.setDouble(1, salary);
-                                    if (supervisorId == null) {
-                                        updateEmp.setNull(2, java.sql.Types.INTEGER);
-                                    } else {
-                                        updateEmp.setInt(2, supervisorId);
+
+                                // --- DAO FOR USERS TABLE UPDATE ---
+                                User tempUser = new User();
+                                tempUser.setUserID(employeeId);
+                                tempUser.setFirstName(fname);
+                                tempUser.setMiddleName(mname);
+                                tempUser.setLastName(lname);
+                                tempUser.setEmail(email);
+                                tempUser.setPhoneNumber(phone);
+
+                                if (UserDAO.updateUser(tempUser)) {
+                                    // DAO handled the basic user info, now the employee-specific tables locally
+                                    conn.setAutoCommit(false);
+
+                                    String updateEmployeeSQL = "UPDATE Employee SET Salary = ?, SupervisorID = ? WHERE EmployeeID = ?";
+                                    try (PreparedStatement updateEmp = conn.prepareStatement(updateEmployeeSQL)) {
+                                        updateEmp.setDouble(1, salary);
+                                        if (supervisorId == null) {
+                                            updateEmp.setNull(2, java.sql.Types.INTEGER);
+                                        } else {
+                                            updateEmp.setInt(2, supervisorId);
+                                        }
+                                        updateEmp.setInt(3, employeeId);
+                                        updateEmp.executeUpdate();
                                     }
-                                    updateEmp.setInt(3, employeeId);
-                                    updateEmp.executeUpdate();
+
+                                    String deleteRoleSQL = "DELETE FROM Employee_Role WHERE EmployeeID = ?";
+                                    try (PreparedStatement deleteRole = conn.prepareStatement(deleteRoleSQL)) {
+                                        deleteRole.setInt(1, employeeId);
+                                        deleteRole.executeUpdate();
+                                    }
+
+                                    String insertRoleSQL = "INSERT INTO Employee_Role (EmployeeID, Role) VALUES (?, ?)";
+                                    try (PreparedStatement insertRole = conn.prepareStatement(insertRoleSQL)) {
+                                        insertRole.setInt(1, employeeId);
+                                        insertRole.setString(2, role);
+                                        insertRole.executeUpdate();
+                                    }
+
+                                    conn.commit();
+                                    JOptionPane.showMessageDialog(this, "Employee updated successfully!");
+                                    loadEmployees(model);
+                                } else {
+                                    JOptionPane.showMessageDialog(this, "Failed to update core user profile.");
                                 }
-                                
-                                String deleteRoleSQL = "DELETE FROM Employee_Role WHERE EmployeeID = ?";
-                                try (PreparedStatement deleteRole = conn.prepareStatement(deleteRoleSQL)) {
-                                    deleteRole.setInt(1, employeeId);
-                                    deleteRole.executeUpdate();
-                                }
-                                
-                                String insertRoleSQL = "INSERT INTO Employee_Role (EmployeeID, Role) VALUES (?, ?)";
-                                try (PreparedStatement insertRole = conn.prepareStatement(insertRoleSQL)) {
-                                    insertRole.setInt(1, employeeId);
-                                    insertRole.setString(2, role);
-                                    insertRole.executeUpdate();
-                                }
-                                
-                                conn.commit();
-                                JOptionPane.showMessageDialog(this, "Employee updated successfully!");
-                                loadEmployees(model);
-                                
+
                             } catch (NumberFormatException e) {
                                 conn.rollback();
                                 JOptionPane.showMessageDialog(this, "Invalid salary amount.");
