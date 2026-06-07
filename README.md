@@ -33,10 +33,12 @@ RHA (Restaurant Management System) is a complete database solution designed for 
 
 Used Sample has these Restaurant Details:
 
+```text
 Name: RHA
 Location: King Fahd Road, Riyadh 12271, Saudi Arabia
 Cuisine: Japanese (Sushi, Sashimi, Teppanyaki)
 Contact: +966-11-456-7890
+```
 
 ---
 
@@ -463,16 +465,18 @@ Mohammed Al-Rashid (General Manager)
 
 ```
 rha-restaurant-management/
-├── DB_Project.sql          # Complete database schema and data
-├── build.xml               # Apache Ant build configuration
-├── manifest.mf             # Java manifest file
-├── Entity Relationship Diagram.svg # the ERD used in the README
-├── build/                  # Compiled classes (generated)
-├── dist/                   # Distribution files (generated)
-├── nbproject/              # NetBeans project files
-├── src/                    # Java source code
-├── test/                   # Unit tests
-└── README.md              # This file
+├── build/                               # Compiled classes (generated)
+├── dist/                                # Distribution files (generated)
+├── nbproject/                           # NetBeans project files
+├── src/                                 # Java source code
+├── .gitattributes                       # Git attributes configuration
+├── .gitignore                           # Git ignore rules
+├── DB_Project.sql                       # Complete database schema and data
+├── Entity Relationship Diagram2.png     # The ERD used in the README
+├── README.md                            # This file
+├── RHALogo.png                          # Project logo
+├── build.xml                            # Apache Ant build configuration
+└── manifest.mf                          # Java manifest file
 ```
 
 ---
